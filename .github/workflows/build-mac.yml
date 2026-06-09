@@ -9,6 +9,10 @@ on:
     tags:
       - 'v*'
 
+# Needed so the release step can create a Release and upload the .dmg to it.
+permissions:
+  contents: write
+
 jobs:
   build-mac:
     runs-on: macos-latest
@@ -37,9 +41,22 @@ jobs:
           # (see Gatekeeper note in the README/instructions).
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
+      # Always uploaded — handy for manual ("Run workflow") test builds.
+      # Note: plain artifacts expire after ~90 days.
       - name: Upload .dmg artifact
         uses: actions/upload-artifact@v4
         with:
           name: ReadingLogDashboard-macOS-dmg
           path: release/*.dmg
           if-no-files-found: error
+
+      # Only on a pushed tag (e.g. v1.0.0): create/update that tag's GitHub
+      # Release and attach the .dmg. This gives a PERMANENT download link:
+      #   https://github.com/CooperWisener/Reading_Log_Dashboard/releases/latest
+      - name: Attach .dmg to a GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*.dmg
+          fail_on_unmatched_files: true
+          generate_release_notes: true

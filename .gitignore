@@ -15,6 +15,7 @@ Reading Log Dashboard.md
 
 # ─── Local tooling / agent data ───────────────────────────────────────────────
 .claude/
+CLAUDE.md
 
 # ─── Environment & secrets ────────────────────────────────────────────────────
 .env
