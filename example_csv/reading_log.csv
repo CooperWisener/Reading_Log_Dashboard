@@ -1,0 +1,79 @@
+Timestamp,Date,Name,Book Title,Book Series (if applicable) ,Author,"Time Read (in minutes, only input the number)",Pages Read (only input the number),Rating
+5/7/2026 19:45:07,5/7/2026,Cooper Wisener,Words of Radiance,The Stormlight Archive,Brandon Sanderson,168,197,5
+5/7/2026 23:52:51,5/7/2026,Bella Wolfe,Bright Young Women,,Jessica Knoll,150,107,5
+5/8/2026 18:57:44,5/8/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson ,76,91,3
+5/9/2026 0:04:33,5/9/2026,Bella Wolfe,Bright Young Women,,Jessica Knoll,68,61,5
+5/9/2026 16:59:35,5/9/2026,Cooper Wisener,Oathbringer,The Stormlight Archive ,Brandon Sanderson ,47,37,2
+5/9/2026 19:44:53,5/9/2026,Cooper Wisener,Oathbringer,The Stormlight Archive ,Brandon Sanderson,41,37,3
+5/10/2026 11:38:03,5/10/2026,Bella Wolfe,Bright Young Women,,Jessica Knoll ,90,73,5
+5/10/2026 12:40:58,5/10/2026,Bella Wolfe,Happy Place ,,Emily Henry ,40,38,4
+5/11/2026 0:51:47,5/11/2026,Bella Wolfe,Happy Place ,,Emily Henry ,20,14,3
+5/11/2026 16:41:52,5/11/2026,Cooper Wisener,Oathbringer,The Stormlight Archive ,Brandon Sanderson,45,40,3
+5/12/2026 0:36:32,5/12/2026,Bella Wolfe,Happy Place,,Emily Henry ,15,10,4
+5/12/2026 0:47:51,5/12/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson,69,68,4
+5/12/2026 18:02:52,5/12/2026,Cooper Wisener,Oathbringer,The Stormlight Archive ,Brandon Sanderson,81,87,5
+5/13/2026 0:12:17,5/13/2026,Cooper Wisener,Oathbringer ,The Stormlight Archive ,Brandon Sanderson,41,34,3
+5/13/2026 0:45:58,5/13/2026,Bella Wolfe,Happy Place ,,Emily Henry ,30,22,4
+5/15/2026 16:25:11,5/15/2026,Cooper Wisener,Oathbringer,The Stormlight Archive ,Brandon Sanderson,72,64,3
+5/15/2026 16:40:42,5/15/2026,Bella Wolfe,Happy Place ,,Emily Henry ,35,29,3
+5/16/2026 15:54:18,5/16/2026,Bella Wolfe,Happy Place ,,Emily Henry ,85,65,4
+5/16/2026 16:24:11,5/16/2026,Cooper Wisener,Oathbringer,The Stormlight Archive ,Brandon Sanderson,53,47,3
+5/16/2026 18:53:19,5/16/2026,Bella Wolfe,Happy Place ,,Emily Henry ,15,11,4
+5/17/2026 15:22:48,5/17/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson,73,75,4
+5/17/2026 23:35:58,5/17/2026,Cooper Wisener,Oathbringer,The Stormlight Archive ,Brandon Sanderson,72,64,4
+5/18/2026 2:56:02,5/18/2026,Bella Wolfe,Happy Place ,,Emily Henry ,30,20,5
+5/18/2026 15:41:15,5/18/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson,86,84,4
+5/18/2026 17:34:13,5/18/2026,Bella Wolfe,Happy Place,,Emily Henry ,60,50,4
+5/18/2026 19:44:51,5/18/2026,Bella Wolfe,Happy Place ,,Emily Henry ,35,26,4
+5/19/2026 1:05:52,5/19/2026,Bella Wolfe,Happy Place ,,Emily Henry ,90,57,5
+5/19/2026 15:44:01,5/19/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson,100,102,5
+5/19/2026 23:16:10,5/19/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson,62,64,3
+5/19/2026 23:44:05,5/19/2026,Bella Wolfe,Happy Place,,Emily Henry ,65,52,5
+5/20/2026 1:11:37,5/20/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid ,34,26,3
+5/20/2026 16:03:43,5/20/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid ,135,92,4
+5/20/2026 22:39:54,5/20/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson,24,23,3
+5/21/2026 0:34:22,5/21/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid ,35,24,4
+5/21/2026 15:43:34,5/21/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid ,25,21,4
+5/21/2026 18:21:31,5/21/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson ,42,33,4
+5/21/2026 22:38:50,5/21/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson,41,34,4
+5/22/2026 9:41:40,5/22/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid,25,20,5
+5/22/2026 14:01:41,5/22/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid ,15,10,5
+5/22/2026 19:02:25,5/22/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid ,60,44,5
+5/23/2026 13:46:52,5/23/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson,28,21,3
+5/23/2026 13:47:22,5/23/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid ,60,50,5
+5/24/2026 0:01:52,5/24/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid ,35,28,5
+5/24/2026 0:03:29,5/24/2026,Cooper Wisener,Oathbringer,The Stormlight Archive,Brandon Sanderson,47,41,4
+5/24/2026 14:00:57,5/24/2026,Bella Wolfe,Atmosphere ,,Taylor Jenkins Reid ,37,31,5
+5/24/2026 14:47:54,5/24/2026,Bella Wolfe,Best Offer Wins ,,Marisa Kashino,32,24,3
+5/24/2026 14:54:03,5/24/2026,Cooper Wisener,Oathbringer,The Stormlight Archive ,Brandon Sanderson,83,77,5
+5/25/2026 18:34:15,5/25/2026,Cooper Wisener,Oathbringer,The Stormlight Archive ,Brandon Sanderson,135,110,4
+5/25/2026 23:13:01,5/25/2026,Bella Wolfe,Best Offer Wins,,Marisa Kashino,26,20,3
+5/26/2026 17:16:35,5/26/2026,Bella Wolfe,Best Offer Wins,,Marisa Kashino,30,21,3
+5/26/2026 21:46:24,5/26/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive ,Brandon Sanderson,51,63,3
+5/27/2026 0:19:47,5/27/2026,Bella Wolfe,Best Offer Wins,,Marisa Kashino ,42,31,3
+5/27/2026 16:04:31,5/27/2026,Bella Wolfe,Best Offer Wins ,,Marisa Kashino ,42,35,3
+5/27/2026 21:53:26,5/27/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive ,Brandon Sanderson,35,29,3
+5/28/2026 0:37:40,5/28/2026,Bella Wolfe,Best Offer Wins,,Marisa Kashino,38,25,4
+5/28/2026 21:54:10,5/28/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive ,Brandon Sanderson,48,41,3
+5/29/2026 12:19:32,5/29/2026,Bella Wolfe,Best Offer Wins,,Marisa Kashino,16,12,4
+5/29/2026 14:04:26,5/29/2026,Bella Wolfe,Best Offer Wins,,Marisa Kashino ,30,24,3
+5/30/2026 12:43:09,5/30/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive,Brandon Sanderson,74,56,4
+5/31/2026 14:32:44,5/31/2026,Bella Wolfe,Best Offer Wins,,Marisa Kashino ,40,33,3
+5/31/2026 22:21:53,5/31/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive,Brandon Sanderson,66,49,3
+6/1/2026 1:32:51,6/1/2026,Bella Wolfe,Best Offer Wins,,Marisa Kashino,62,51,4
+6/1/2026 14:46:34,6/1/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive,Brandon Sanderson,110,97,4
+6/1/2026 20:25:39,6/1/2026,Bella Wolfe,Great Big Beautiful Life,,Emily Henry ,30,23,5
+6/1/2026 22:08:19,6/1/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive,Brandon Sanderson,47,44,4
+6/2/2026 14:48:33,6/2/2026,Bella Wolfe,Great Big Beautiful Life,,Emily Henry ,45,39,4
+6/2/2026 16:05:32,6/2/2026,Bella Wolfe,Great Big Beautiful Life ,,Emily Henry ,22,15,4
+6/2/2026 21:51:14,6/2/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive,Brandon Sanderson,45,37,3
+6/3/2026 0:24:28,6/3/2026,Bella Wolfe,Great Big Beautiful Life ,,Emily Henry ,32,23,5
+6/3/2026 22:02:32,6/3/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive,Brandon Sanderson,49,41,5
+6/4/2026 0:36:18,6/4/2026,Bella Wolfe,Great Big Beautiful Life,,Emily Henry ,25,20,4
+6/5/2026 16:09:31,6/5/2026,Cooper Wisener,Oathbringer ,The Stormlight Archive,Brandon Sanderson,110,100,5
+6/5/2026 17:17:03,6/5/2026,Bella Wolfe,Great Big Beautiful Life ,,Emily Henry ,20,15,4
+6/6/2026 1:56:22,6/6/2026,Bella Wolfe,Great Big Beautiful Life,,Emily Henry ,29,20,4
+6/6/2026 14:49:45,6/6/2026,Cooper Wisener,Rhythm of War,The Stormlight Archive,Brandon Sanderson,85,75,3
+6/6/2026 17:23:02,6/6/2026,Bella Wolfe,Great Big Beautiful Life,,Emily Henry ,50,38,5
+6/7/2026 13:51:03,6/7/2026,Cooper Wisener,Rhythm of War ,The Stormlight Archive,Brandon Sanderson ,55,41,3
+6/7/2026 16:55:20,6/7/2026,Bella Wolfe,Great Big Beautiful Life ,,Emily Henry,30,27,5
