@@ -1,0 +1,45 @@
+name: Build macOS installer
+
+# Builds the macOS .dmg on a real Mac runner (you can't build it on Windows).
+# Trigger it manually from the Actions tab ("Run workflow"), or by pushing a
+# version tag like v1.0.0.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build renderer (Vite)
+        run: npx vite build
+
+      - name: Build macOS app (universal .dmg)
+        # --universal = one .dmg that runs on both Apple Silicon and Intel Macs.
+        run: npx electron-builder --mac --universal --publish never
+        env:
+          # No Apple Developer certs on CI → build UNSIGNED instead of failing.
+          # The .dmg works; recipients right-click → Open the first time
+          # (see Gatekeeper note in the README/instructions).
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Upload .dmg artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ReadingLogDashboard-macOS-dmg
+          path: release/*.dmg
+          if-no-files-found: error
