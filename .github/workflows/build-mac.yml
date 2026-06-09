@@ -1,21 +1,30 @@
-name: Build macOS installer
+name: Build installers (macOS + Windows)
 
-# Builds the macOS .dmg on a real Mac runner (you can't build it on Windows).
-# Trigger it manually from the Actions tab ("Run workflow"), or by pushing a
-# version tag like v1.0.0.
+# Builds the macOS .dmg and Windows .exe in parallel. Run manually from the
+# Actions tab to get downloadable artifacts, or push a version tag (e.g. v1.0.0)
+# to ALSO publish both installers to a GitHub Release with a permanent link.
 on:
   workflow_dispatch:
   push:
     tags:
       - 'v*'
 
-# Needed so the release step can create a Release and upload the .dmg to it.
-permissions:
-  contents: write
-
 jobs:
-  build-mac:
-    runs-on: macos-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            # --universal = one .dmg for both Apple Silicon and Intel Macs.
+            build_cmd: npx electron-builder --mac --universal --publish never
+            artifact_name: macos-dmg
+            artifact_path: release/*.dmg
+          - os: windows-latest
+            build_cmd: npx electron-builder --win nsis --publish never
+            artifact_name: windows-exe
+            artifact_path: release/*.exe
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,31 +41,37 @@ jobs:
       - name: Build renderer (Vite)
         run: npx vite build
 
-      - name: Build macOS app (universal .dmg)
-        # --universal = one .dmg that runs on both Apple Silicon and Intel Macs.
-        run: npx electron-builder --mac --universal --publish never
+      - name: Build installer
+        run: ${{ matrix.build_cmd }}
         env:
           # No Apple Developer certs on CI → build UNSIGNED instead of failing.
-          # The .dmg works; recipients right-click → Open the first time
-          # (see Gatekeeper note in the README/instructions).
+          # (Harmless on the Windows runner.)
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
-      # Always uploaded — handy for manual ("Run workflow") test builds.
-      # Note: plain artifacts expire after ~90 days.
-      - name: Upload .dmg artifact
+      - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ReadingLogDashboard-macOS-dmg
-          path: release/*.dmg
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_path }}
           if-no-files-found: error
 
-      # Only on a pushed tag (e.g. v1.0.0): create/update that tag's GitHub
-      # Release and attach the .dmg. This gives a PERMANENT download link:
-      #   https://github.com/CooperWisener/Reading_Log_Dashboard/releases/latest
-      - name: Attach .dmg to a GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
+  # Runs only on a pushed tag: gathers both installers and attaches them to the
+  # tag's GitHub Release. Permanent link: …/releases/latest
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all installers
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Publish to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: release/*.dmg
+          files: artifacts/**/*
           fail_on_unmatched_files: true
           generate_release_notes: true
