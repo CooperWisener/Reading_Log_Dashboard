@@ -12,6 +12,7 @@ dist-electron/
 # ─── Planning / internal docs (keep out of the public repo) ───────────────────
 prompting plan.md
 Reading Log Dashboard.md
+v2_planning.md
 
 # ─── Local tooling / agent data ───────────────────────────────────────────────
 .claude/

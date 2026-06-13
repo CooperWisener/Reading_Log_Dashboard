@@ -5,6 +5,7 @@ import Layout from './components/Layout'
 import LoadData from './components/LoadData'
 import Competition from './pages/Competition'
 import Analytics from './pages/Analytics'
+import History from './pages/History'
 import Wrapped from './pages/Wrapped'
 
 // Temporary debug hook — remove after verification
@@ -184,6 +185,7 @@ export default function App() {
       <Route element={hasData ? <Layout /> : <Navigate to="/" replace />}>
         <Route path="competition" element={<Competition />} />
         <Route path="analytics" element={<Analytics />} />
+        <Route path="history" element={<History />} />
         <Route path="wrapped" element={<Wrapped />} />
       </Route>
     </Routes>

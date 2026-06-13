@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { Home, BarChart2, Gift, RefreshCw } from 'lucide-react'
+import { Home, BarChart2, Clock, Gift, RefreshCw } from 'lucide-react'
 import { format } from 'date-fns'
 import useStore from '../store/useStore'
 
 const navLinks = [
   { to: '/competition', label: 'Competition', icon: Home },
   { to: '/analytics', label: 'Analytics', icon: BarChart2 },
+  { to: '/history', label: 'History', icon: Clock },
   { to: '/wrapped', label: 'Wrapped', icon: Gift },
 ]
 
