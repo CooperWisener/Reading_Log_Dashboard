@@ -20,10 +20,19 @@ async function fetchSheetData(url) {
     throw new Error('Global fetch is unavailable in this runtime.')
   }
 
+  // Defeat caching so an on-demand refresh actually reflects new rows. Two
+  // caches sit between us and a freshly-submitted Form row: Electron's HTTP
+  // cache, and Google's published-CSV CDN snapshot — both keyed by URL. A
+  // unique nonce per request makes the URL distinct (busting both), and the
+  // no-store/no-cache directives stop Electron from reusing a prior response.
+  const bustUrl = url + (url.includes('?') ? '&' : '?') + `_cb=${Date.now()}`
+
   let res
   try {
-    res = await fetch(url, {
+    res = await fetch(bustUrl, {
       redirect: 'follow',
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' },
       signal: AbortSignal.timeout(20000),
     })
   } catch (err) {

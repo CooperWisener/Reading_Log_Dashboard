@@ -196,7 +196,7 @@ export default function Wrapped() {
           <StatCard
             label="Favorite Book"
             value={stats.favoriteBook ?? '—'}
-            sub={stats.favoriteBook ? 'Highest avg rating (2+ sessions)' : 'No rated books yet'}
+            sub={stats.favoriteBook ? 'Highest avg rating' : 'No rated books yet'}
           />
           <StatCard
             label="Top Author"

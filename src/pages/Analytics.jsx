@@ -64,7 +64,7 @@ function BookList({ books }) {
   const qualified = useMemo(
     () =>
       books
-        .filter((b) => b.sessionCount >= 2)
+        .filter((b) => b.sessionCount >= 1)
         .sort((a, b) => b.avgRating - a.avgRating)
         .slice(0, 10),
     [books]
@@ -73,7 +73,7 @@ function BookList({ books }) {
   if (qualified.length === 0) {
     return (
       <p className="text-slate-500 text-sm italic py-2">
-        No books with 2+ sessions yet.
+        No books logged yet.
       </p>
     )
   }

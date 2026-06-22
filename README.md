@@ -25,7 +25,7 @@ A head-to-head view of everyone in the log. On load, each participant races down
 ### 📊 Analytics
 A detailed breakdown per reader — view one participant or several side-by-side:
 
-- **Top-Rated Books** — averaged across sessions (minimum 2 sessions), shown with star ratings
+- **Top-Rated Books** — averaged across all logged sessions, shown with star ratings
 - **Reading Heatmap** — a GitHub-style 12-month contribution calendar colored by minutes read per day
 - **Days of the Week** — bar chart, toggle between sessions / minutes / pages
 - **Progress Over Time** — line chart with toggleable minutes / pages / sessions series

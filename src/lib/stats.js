@@ -209,7 +209,7 @@ export function getWrappedStats(sessions, participant, period) {
     consistencyPct = Math.round((sortedDays.length / span) * 1000) / 10
   }
 
-  // Favorite book (highest avgRating with sessionCount >= 2)
+  // Favorite book (highest avgRating among books that have at least one rating)
   const bookMap = {}
   for (const s of filtered) {
     const key = s.bookTitle.toLowerCase()
@@ -218,7 +218,7 @@ export function getWrappedStats(sessions, participant, period) {
     bookMap[key].count++
   }
   const favoriteBook = Object.values(bookMap)
-    .filter((b) => b.count >= 2 && b.ratings.length > 0)
+    .filter((b) => b.count >= 1 && b.ratings.length > 0)
     .map((b) => ({
       bookTitle: b.bookTitle,
       avgRating: b.ratings.reduce((a, r) => a + r, 0) / b.ratings.length,
