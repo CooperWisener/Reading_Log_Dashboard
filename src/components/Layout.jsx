@@ -1,15 +1,46 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { Home, BarChart2, Clock, Gift, RefreshCw } from 'lucide-react'
+import { Home, BarChart2, Clock, Trophy, Gift, RefreshCw } from 'lucide-react'
 import { format } from 'date-fns'
 import useStore from '../store/useStore'
+import { getRibbonChamp } from '../lib/stats'
 
 const navLinks = [
   { to: '/competition', label: 'Competition', icon: Home },
   { to: '/analytics', label: 'Analytics', icon: BarChart2 },
   { to: '/history', label: 'History', icon: Clock },
+  { to: '/winners', label: 'Winners', icon: Trophy },
   { to: '/wrapped', label: 'Wrapped', icon: Gift },
 ]
+
+// Minutes → "Hh Mm" (matches the Competition/Winners formatting).
+function formatHM(minutes) {
+  const h = Math.floor(minutes / 60)
+  const m = minutes % 60
+  return h > 0 ? `${h}h ${m}m` : `${m}m`
+}
+
+// A gold ribbon that "hangs" from the top of every page, celebrating the most
+// recently finished split's champion (by minutes). Full-width bar across the top.
+function TopBanner({ champ }) {
+  return (
+    <div
+      className="w-full flex items-center justify-center gap-2.5 px-6 py-2.5"
+      style={{
+        background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+        boxShadow: '0 4px 14px -6px rgba(245,158,11,0.6)',
+      }}
+    >
+      <span className="text-lg leading-none" aria-hidden="true">🏆</span>
+      <p className="text-sm font-bold text-amber-50 text-center">
+        {champ.label} Champion: {champ.winner}
+        <span className="font-semibold text-amber-100/80">
+          {' '}· {formatHM(champ.totalMinutes)}
+        </span>
+      </p>
+    </div>
+  )
+}
 
 export default function Layout() {
   const navigate = useNavigate()
@@ -17,6 +48,11 @@ export default function Layout() {
   const syncFromSheets = useStore((s) => s.syncFromSheets)
   const lastSynced = useStore((s) => s.lastSynced)
   const isLoading = useStore((s) => s.isLoading)
+  const sessions = useStore((s) => s.sessions)
+
+  // Newest finished month's champion (or the Summer Split seed until the first
+  // month finishes). Null until a split window has passed.
+  const champ = useMemo(() => getRibbonChamp(sessions), [sessions])
 
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState(null)
@@ -48,7 +84,10 @@ export default function Layout() {
   }
 
   return (
-    <div className="flex min-h-screen" style={{ backgroundColor: '#0f172a' }}>
+    <div className="flex flex-col h-screen overflow-hidden" style={{ backgroundColor: '#0f172a' }}>
+      {champ?.winner && <TopBanner champ={champ} />}
+
+      <div className="flex flex-1 min-h-0">
       <aside className="w-[220px] shrink-0 flex flex-col" style={{ backgroundColor: '#1e293b' }}>
         <div className="px-6 py-6">
           <span className="text-white font-bold text-base leading-tight">Reading Log Dashboard</span>
@@ -100,7 +139,10 @@ export default function Layout() {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto p-8 relative" style={{ backgroundColor: '#0f172a' }}>
+      <main
+        className="flex-1 overflow-y-auto p-8 relative"
+        style={{ backgroundColor: '#0f172a', scrollbarGutter: 'stable' }}
+      >
         {isLoading && (
           <div
             className="absolute inset-0 z-10 flex items-center justify-center"
@@ -114,6 +156,7 @@ export default function Layout() {
         )}
         <Outlet />
       </main>
+      </div>
     </div>
   )
 }

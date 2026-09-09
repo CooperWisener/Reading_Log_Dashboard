@@ -26,6 +26,14 @@ function toNum(val) {
   return isFinite(n) ? n : 0
 }
 
+// Interprets a "completed" cell as a boolean. Google Sheets checkboxes export as
+// TRUE/FALSE, but a hand-typed checkmark column might hold "yes", "x", "✓", "1",
+// etc. Anything truthy-looking counts as completed; blank / FALSE → false.
+const TRUTHY = new Set(['true', 'yes', 'y', 'x', '✓', '1', 'done', 'complete', 'completed'])
+function toBool(val) {
+  return TRUTHY.has(String(val ?? '').trim().toLowerCase())
+}
+
 // ─── Flexible header resolution ───────────────────────────────────────────────
 // Google Form column headers carry the full question text, which often includes
 // instructional suffixes (e.g. "Time Read (in minutes, only input the number)").
@@ -45,6 +53,7 @@ const FIELD_MATCHERS = [
   ['minutesRead', (k) => k.startsWith('time read') || k.includes('minute')],
   ['pagesRead', (k) => k.startsWith('pages read') || k.includes('page')],
   ['rating', (k) => k.startsWith('rating')],
+  ['completed', (k) => k.startsWith('complete') || k.includes('finish') || k.includes('done')],
 ]
 
 // Build { field → actualHeaderKey } from the parsed header list.
@@ -124,6 +133,7 @@ export function parseCSV(fileContent) {
       minutesRead: toNum(rawMinutes), // NaN → 0
       pagesRead: toNum(get(row, 'pagesRead')), // NaN → 0
       rating,
+      completed: toBool(get(row, 'completed')), // absent column → false
     })
   }
 

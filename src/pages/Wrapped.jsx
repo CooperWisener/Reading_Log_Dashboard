@@ -66,11 +66,11 @@ export default function Wrapped() {
   )
 
   // Subtext describing where the selection ranks in a given metric.
-  // For "Overall" there is no rank, so we surface the category leader instead.
+  // For "Combined" there is no rank, so we surface the category leader instead.
   function rankSub(metricKey) {
     if (rankedParticipants.length === 0) return null
 
-    if (wrappedParticipant === 'Overall') {
+    if (wrappedParticipant === 'Combined') {
       const leader = [...rankedParticipants].sort(
         (a, b) => b.s[metricKey] - a.s[metricKey]
       )[0]
@@ -119,7 +119,7 @@ export default function Wrapped() {
           aria-label="Participant"
           className={selectClass}
         >
-          <option value="Overall">Overall</option>
+          <option value="Combined">Combined</option>
           {participants.map((name) => (
             <option key={name} value={name}>
               {name}
@@ -139,7 +139,7 @@ export default function Wrapped() {
             No reading data for {periodLabel.toLowerCase()}.
           </p>
           <p className="text-slate-400 text-sm">
-            {wrappedParticipant === 'Overall'
+            {wrappedParticipant === 'Combined'
               ? 'No one logged any sessions in this period — try a wider time range.'
               : `${wrappedParticipant} hasn't logged any sessions in this period — try a wider time range.`}
           </p>
@@ -179,6 +179,11 @@ export default function Wrapped() {
             sub={rankSub('totalSessions')}
           />
           <StatCard
+            label="Completed Books"
+            value={stats.completedBooks}
+            sub={rankSub('completedBooks')}
+          />
+          <StatCard
             label="Longest Single Session"
             value={`${stats.longestSession} min`}
             sub={rankSub('longestSession')}
@@ -195,12 +200,12 @@ export default function Wrapped() {
           />
           <StatCard
             label="Favorite Book"
-            value={stats.favoriteBook ?? '—'}
+            value={stats.favoriteBook || '—'}
             sub={stats.favoriteBook ? 'Highest avg rating' : 'No rated books yet'}
           />
           <StatCard
             label="Top Author"
-            value={stats.topAuthor ?? '—'}
+            value={stats.topAuthor || '—'}
             sub="Most minutes read"
           />
           <StatCard

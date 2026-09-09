@@ -36,6 +36,15 @@ function createWindow() {
     },
   })
 
+  // Harden navigation: deny all window.open, and block renderer-initiated
+  // navigation to anything but the app's own dev/prod origin.
+  win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
+  win.webContents.on('will-navigate', (event, url) => {
+    if (!url.startsWith('http://localhost:5173') && !url.startsWith('file://')) {
+      event.preventDefault()
+    }
+  })
+
   if (isDev) {
     win.loadURL('http://localhost:5173')
   } else {
@@ -55,6 +64,11 @@ ipcMain.handle('dialog:openFile', async () => {
 })
 
 ipcMain.handle('file:read', async (_event, filePath) => {
+  // Only used by the local-CSV picker (which already filters to .csv). Refuse
+  // anything else so the renderer can't read arbitrary files off disk.
+  if (typeof filePath !== 'string' || !filePath.toLowerCase().endsWith('.csv')) {
+    throw new Error('Refused to read non-CSV file.')
+  }
   return fs.readFileSync(filePath, 'utf-8')
 })
 

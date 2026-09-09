@@ -10,17 +10,20 @@
 
 ---
 
-Reading Log Dashboard is an Electron desktop app for visualizing a shared reading log. A group logs their reading through a Google Form; the app pulls that data (live from a published Google Sheet, or from a CSV file) and renders three views: a head-to-head **Competition**, per-reader **Analytics**, and a personal **Wrapped** summary.
+Reading Log Dashboard is an Electron desktop app for visualizing a shared reading log. A group logs their reading through a Google Form; the app pulls that data (live from a published Google Sheet, or from a CSV file) and renders several views: a head-to-head **Competition**, per-reader **Analytics**, a session **History** log, past-champion **Winners**, and a personal **Wrapped** summary.
 
 ## Features
 
 ### 🏁 Competition
-A head-to-head view of everyone in the log. On load, each participant races down a track to their proportional finish, settling into a ranked standings table. Switch the metric from a dropdown to re-run the race:
+A head-to-head view of everyone in the log. On load, each participant races down a track to their proportional finish, settling into a ranked standings table. Pick a **Year** and **Month** (or **All Year**) to scope the race to that period, then switch the metric to re-run it:
 
 - Total Minutes Read
 - Total Pages Read
 - Total Sessions
 - % of Days Read (unique days read ÷ days since the first log entry)
+- Books Completed
+
+A gold ribbon across the top of every page crowns the most recently finished month's champion (by total minutes read).
 
 ### 📊 Analytics
 A detailed breakdown per reader — view one participant or several side-by-side:
@@ -31,8 +34,14 @@ A detailed breakdown per reader — view one participant or several side-by-side
 - **Progress Over Time** — line chart with toggleable minutes / pages / sessions series
 - **Cumulative Totals** — running totals over time
 
+### 🕑 History
+A chronological feed of every logged reading session, newest first.
+
+### 🏆 Winners
+Past champions of each finished competition window, ranked by total minutes read.
+
 ### 🎁 Wrapped
-A highlight-reel summary for **This Week / This Month / All Time**, per participant or **Overall**: total minutes, pages, and sessions, longest single session, best single day, longest streak, favorite book, top author, reading consistency, and a generated headline stat (e.g. *"Read for 3+ hours on 4 days"*). Each numeric card shows where you rank against the other readers.
+A highlight-reel summary for **This Week / This Month / All Time**, per participant or **Combined**: total minutes, pages, and sessions, longest single session, best single day, longest streak, favorite book, top author, reading consistency, and a generated headline stat (e.g. *"Read for 3+ hours on 4 days"*). Each card shows where the selection ranks against the other readers (or who leads, in **Combined**).
 
 ## Download & Install
 
@@ -127,8 +136,8 @@ git push origin v1.0.0
 ```
 electron/        Main process — IPC handlers, Google Sheets fetch, electron-store
 src/
-  pages/         Competition, Analytics, Wrapped
-  components/    Layout (sidebar), LoadData, HeatmapCalendar
+  pages/         Competition, Analytics, History, Winners, Wrapped
+  components/    Layout (sidebar + gold ribbon), LoadData, HeatmapCalendar
   lib/           parseCSV, fetchSheetData, stats (pure stat functions)
   store/         Zustand store
 build/           App icon (icon.png) → platform icons generated at package time
