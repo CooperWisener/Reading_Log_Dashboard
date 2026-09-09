@@ -7,7 +7,16 @@ const METRICS = [
   { label: 'Total Pages Read', key: 'totalPages' },
   { label: 'Total Sessions', key: 'totalSessions' },
   { label: '% of Days Read', key: 'percentDaysRead' },
+  { label: 'Books Completed', key: 'completedBooks' },
 ]
+
+const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+]
+
+const selectClass =
+  'bg-slate-800 text-white border border-slate-600 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer'
 
 function formatValue(value, metric) {
   switch (metric) {
@@ -22,6 +31,8 @@ function formatValue(value, metric) {
       return `${value} sessions`
     case 'percentDaysRead':
       return `${value}%`
+    case 'completedBooks':
+      return `${value} book${value === 1 ? '' : 's'}`
     default:
       return String(value)
   }
@@ -31,11 +42,76 @@ export default function Competition() {
   const sessions = useStore((s) => s.sessions)
   const competitionMetric = useStore((s) => s.competitionMetric)
   const setCompetitionMetric = useStore((s) => s.setCompetitionMetric)
+  const competitionYear = useStore((s) => s.competitionYear)
+  const setCompetitionYear = useStore((s) => s.setCompetitionYear)
+  const competitionMonth = useStore((s) => s.competitionMonth)
+  const setCompetitionMonth = useStore((s) => s.setCompetitionMonth)
 
   const [started, setStarted] = useState(false)
   const [complete, setComplete] = useState(false)
 
-  const statsMap = useMemo(() => getStatsByParticipant(sessions), [sessions])
+  // Stable "today" for the lifetime of the mount so the year/month derivations
+  // below don't silently drift if the app is left open across midnight/new-year.
+  const now = useMemo(() => new Date(), [])
+
+  // Years that have data, plus the current year, newest first.
+  const availableYears = useMemo(() => {
+    const set = new Set(
+      sessions.map((s) => s.date && s.date.getFullYear()).filter(Boolean)
+    )
+    set.add(now.getFullYear())
+    return [...set].sort((a, b) => b - a)
+  }, [sessions])
+
+  // Effective year: the stored pick if still valid, else the current year when
+  // present, else the newest year with data.
+  const year = useMemo(() => {
+    if (competitionYear != null && availableYears.includes(competitionYear)) {
+      return competitionYear
+    }
+    if (availableYears.includes(now.getFullYear())) return now.getFullYear()
+    return availableYears[0]
+  }, [competitionYear, availableYears])
+
+  // Months (0-indexed) that have data in the effective year, ascending.
+  const availableMonths = useMemo(() => {
+    const set = new Set(
+      sessions
+        .filter((s) => s.date && s.date.getFullYear() === year)
+        .map((s) => s.date.getMonth())
+    )
+    return [...set].sort((a, b) => a - b)
+  }, [sessions, year])
+
+  // Effective month: 'all' or a 0-indexed month. Defaults to the current month
+  // (when the current year has data for it), else the newest month with data.
+  const month = useMemo(() => {
+    if (competitionMonth === 'all') return 'all'
+    if (
+      typeof competitionMonth === 'number' &&
+      availableMonths.includes(competitionMonth)
+    ) {
+      return competitionMonth
+    }
+    if (year === now.getFullYear() && availableMonths.includes(now.getMonth())) {
+      return now.getMonth()
+    }
+    return availableMonths.length > 0 ? availableMonths[availableMonths.length - 1] : 'all'
+  }, [competitionMonth, availableMonths, year])
+
+  const periodSessions = useMemo(
+    () =>
+      sessions.filter((s) => {
+        if (!s.date || s.date.getFullYear() !== year) return false
+        return month === 'all' || s.date.getMonth() === month
+      }),
+    [sessions, year, month]
+  )
+
+  const statsMap = useMemo(
+    () => getStatsByParticipant(periodSessions),
+    [periodSessions]
+  )
 
   const ranked = useMemo(() => {
     return Object.entries(statsMap)
@@ -63,32 +139,78 @@ export default function Competition() {
       cancelAnimationFrame(raf2)
       clearTimeout(timer)
     }
-  }, [competitionMetric])
+  }, [competitionMetric, year, month])
 
   const currentMetric = METRICS.find((m) => m.key === competitionMetric)
 
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header row */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between gap-4 mb-8 flex-wrap">
         <h1 className="text-white text-3xl font-bold">Competition</h1>
 
-        <div className="flex items-center gap-3">
-          <label className="text-slate-400 text-sm font-medium whitespace-nowrap">
-            Metric:
-          </label>
-          <select
-            value={competitionMetric}
-            onChange={(e) => setCompetitionMetric(e.target.value)}
-            aria-label="Competition metric"
-            className="bg-slate-800 text-white border border-slate-600 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
-          >
-            {METRICS.map((m) => (
-              <option key={m.key} value={m.key}>
-                {m.label}
-              </option>
-            ))}
-          </select>
+        <div className="flex items-center gap-4 flex-wrap">
+          <div className="flex items-center gap-3">
+            <label className="text-slate-400 text-sm font-medium whitespace-nowrap">
+              Year:
+            </label>
+            <select
+              value={year}
+              onChange={(e) => {
+                setCompetitionYear(Number(e.target.value))
+                setCompetitionMonth(null) // re-default the month for the new year
+              }}
+              aria-label="Competition year"
+              className={selectClass}
+            >
+              {availableYears.map((y) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <label className="text-slate-400 text-sm font-medium whitespace-nowrap">
+              Month:
+            </label>
+            <select
+              value={month}
+              onChange={(e) =>
+                setCompetitionMonth(
+                  e.target.value === 'all' ? 'all' : Number(e.target.value)
+                )
+              }
+              aria-label="Competition month"
+              className={selectClass}
+            >
+              <option value="all">All Year</option>
+              {availableMonths.map((m) => (
+                <option key={m} value={m}>
+                  {MONTH_NAMES[m]}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <label className="text-slate-400 text-sm font-medium whitespace-nowrap">
+              Metric:
+            </label>
+            <select
+              value={competitionMetric}
+              onChange={(e) => setCompetitionMetric(e.target.value)}
+              aria-label="Competition metric"
+              className={selectClass}
+            >
+              {METRICS.map((m) => (
+                <option key={m.key} value={m.key}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 

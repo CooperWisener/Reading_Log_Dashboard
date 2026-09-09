@@ -6,10 +6,12 @@ import LoadData from './components/LoadData'
 import Competition from './pages/Competition'
 import Analytics from './pages/Analytics'
 import History from './pages/History'
+import Winners from './pages/Winners'
 import Wrapped from './pages/Wrapped'
 
-// Temporary debug hook — remove after verification
-if (typeof window !== 'undefined') {
+// Dev-only debug hook: exposes the store on window for inspection. Guarded by
+// import.meta.env.DEV so it is stripped from production builds.
+if (import.meta.env.DEV && typeof window !== 'undefined') {
   import('./store/useStore').then((m) => {
     window.__STORE__ = m.default.getState
   })
@@ -186,6 +188,7 @@ export default function App() {
         <Route path="competition" element={<Competition />} />
         <Route path="analytics" element={<Analytics />} />
         <Route path="history" element={<History />} />
+        <Route path="winners" element={<Winners />} />
         <Route path="wrapped" element={<Wrapped />} />
       </Route>
     </Routes>

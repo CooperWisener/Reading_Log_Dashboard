@@ -6,8 +6,10 @@ const DEFAULTS = {
   sessions: [],
   selectedParticipants: [],
   competitionMetric: 'totalMinutes',
+  competitionYear: null,
+  competitionMonth: null,
   wrappedPeriod: 'alltime',
-  wrappedParticipant: 'Overall',
+  wrappedParticipant: 'Combined',
   lastSynced: null,
   isLoading: false,
 }
@@ -45,6 +47,10 @@ const useStore = create((set) => ({
   setSelectedParticipants: (names) => set({ selectedParticipants: names }),
 
   setCompetitionMetric: (metric) => set({ competitionMetric: metric }),
+
+  setCompetitionYear: (year) => set({ competitionYear: year }),
+
+  setCompetitionMonth: (month) => set({ competitionMonth: month }),
 
   setWrappedPeriod: (period) => set({ wrappedPeriod: period }),
 

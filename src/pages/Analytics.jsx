@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
   ResponsiveContainer,
   BarChart, Bar,
@@ -12,6 +12,7 @@ import {
   getBooksByParticipant,
   getDayOfWeekData,
   getOverTimeData,
+  getFinishedBooksOverTime,
 } from '../lib/stats'
 import HeatmapCalendar from '../components/HeatmapCalendar'
 
@@ -84,7 +85,14 @@ function BookList({ books }) {
         <div key={book.bookTitle} className="py-3 border-b border-slate-700/50 last:border-0">
           <div className="flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <p className="text-white text-sm font-semibold leading-snug">{book.bookTitle}</p>
+              <p className="text-white text-sm font-semibold leading-snug">
+                {book.bookTitle}
+                {book.completed && (
+                  <span className="ml-2 inline-block px-1.5 py-0.5 rounded text-xs font-medium bg-emerald-900/60 text-emerald-300 align-middle">
+                    ✓ Completed
+                  </span>
+                )}
+              </p>
               <p className="text-slate-400 text-xs mt-0.5">{book.author}</p>
             </div>
             <div className="shrink-0 pt-0.5">
@@ -344,6 +352,65 @@ function CumulativeChart({ sessions, name }) {
   )
 }
 
+// ─── Chart: Books Finished Over Time ──────────────────────────────────────────
+
+const FINISHED_COLOR = '#10b981'
+
+function FinishedBooksChart({ sessions, name }) {
+  const data = useMemo(() => getFinishedBooksOverTime(sessions, name), [sessions, name])
+
+  const xFmt   = (d) => format(parseISO(d), 'MMM d')
+  const lblFmt = (d) => format(parseISO(d), 'MMM d, yyyy')
+
+  if (data.length === 0) {
+    return (
+      <div>
+        <h4 className="text-white text-sm font-semibold mb-3">Books Finished</h4>
+        <p className="text-slate-500 text-sm italic py-2">No completed books yet.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="text-white text-sm font-semibold">Books Finished</h4>
+        <span className="text-xs" style={{ color: FINISHED_COLOR }}>Cumulative</span>
+      </div>
+
+      <ResponsiveContainer width="100%" height={190}>
+        <LineChart data={data} margin={{ top: 4, right: 8, bottom: 0, left: -20 }}>
+          <CartesianGrid stroke={GRID_STROKE} strokeDasharray="3 3" vertical={false} />
+          <XAxis
+            dataKey="date"
+            tick={{ fill: '#64748b', fontSize: 10 }}
+            axisLine={false}
+            tickLine={false}
+            tickFormatter={xFmt}
+            interval="preserveStartEnd"
+          />
+          <YAxis tick={TICK_PROPS} axisLine={false} tickLine={false} allowDecimals={false} />
+          <Tooltip
+            contentStyle={TOOLTIP_STYLE}
+            labelStyle={LABEL_STYLE}
+            itemStyle={ITEM_STYLE}
+            labelFormatter={lblFmt}
+          />
+          <Line
+            type="stepAfter"
+            dataKey="cumulative"
+            name="Books finished"
+            stroke={FINISHED_COLOR}
+            strokeWidth={2}
+            dot={{ r: 3, fill: FINISHED_COLOR, strokeWidth: 0 }}
+            activeDot={{ r: 4, strokeWidth: 0 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
+
 // ─── Per-participant column ──────────────────────────────────────────────────
 
 function ParticipantColumn({ name, sessions }) {
@@ -387,6 +454,11 @@ function ParticipantColumn({ name, sessions }) {
       <div className={card} style={cardBg}>
         <CumulativeChart sessions={sessions} name={name} />
       </div>
+
+      {/* Books Finished Line Chart */}
+      <div className={card} style={cardBg}>
+        <FinishedBooksChart sessions={sessions} name={name} />
+      </div>
     </div>
   )
 }
@@ -400,16 +472,20 @@ export default function Analytics() {
 
   const participants = useMemo(() => getParticipants(sessions), [sessions])
 
-  // Default to first participant once participants become available
-  const initialized = useRef(false)
+  // Keep the selection in sync with the available participants: default to the
+  // first reader when nothing valid is selected, and drop any names that no
+  // longer exist after a data refresh (otherwise a removed/renamed reader stays
+  // selected with no toggle button to clear it).
   const hasParticipants = participants.length > 0
   useEffect(() => {
-    if (!initialized.current && hasParticipants && selectedParticipants.length === 0) {
+    if (!hasParticipants) return
+    const valid = selectedParticipants.filter((n) => participants.includes(n))
+    if (valid.length === 0) {
       setSelectedParticipants([participants[0]])
-      initialized.current = true
+    } else if (valid.length !== selectedParticipants.length) {
+      setSelectedParticipants(valid)
     }
-    if (hasParticipants) initialized.current = true
-  }, [hasParticipants])
+  }, [participants, selectedParticipants, setSelectedParticipants, hasParticipants])
 
   function toggleParticipant(name) {
     if (selectedParticipants.includes(name)) {
