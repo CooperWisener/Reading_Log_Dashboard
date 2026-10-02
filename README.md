@@ -8,6 +8,8 @@
 
 [![Build status](https://github.com/CooperWisener/Reading_Log_Dashboard/actions/workflows/build-mac.yml/badge.svg)](https://github.com/CooperWisener/Reading_Log_Dashboard/actions/workflows/build-mac.yml)
 
+> **This repository is archived.** v3.0.0 is the final release of Reading Log Dashboard. The installers on the [Releases page](https://github.com/CooperWisener/Reading_Log_Dashboard/releases) keep working. Development continues privately as **Reader's Trail**.
+
 ---
 
 Reading Log Dashboard is an Electron desktop app for visualizing a shared reading log. A group logs their reading through a Google Form; the app pulls that data (live from a published Google Sheet, or from a CSV file) and renders several views: a head-to-head **Competition**, per-reader **Analytics**, a session **History** log, past-champion **Winners**, and a personal **Wrapped** summary.
